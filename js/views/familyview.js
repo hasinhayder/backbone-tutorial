@@ -1,19 +1,22 @@
 var FamilyView = Backbone.View.extend({
     el:"#family",
+
     initialize:function(){
-    _.bindAll(this,"render");
+    _.bindAll(this,"render","hover");
         this.render();
 },
+    events:{
+        "hover tr":"hover"
+    },
     render:function(){
-        alert("rendering");
+        var template= _.template($("#member").html());
         var family = this.collection;
         _.each(family.models,function(member){
-            var item = $("<tr/>");
-            $("<td/>").html(member.get("fname")).appendTo(item);
-            $("<td/>").html(member.get("lname")).appendTo(item);
-            $("<td/>").html(member.get("age")).appendTo(item);
-            $("<td/>").html(member.get("sex")).appendTo(item);
-            item.appendTo(this.$el);
-        },this)
+            $(this.el).append(template(member.toJSON()));
+        },this);
+    },
+    hover:function(e){
+        $("tr.member").css("backgroundColor","#FFF");
+        $(e.currentTarget).css("backgroundColor","#DDD");
     }
 })
